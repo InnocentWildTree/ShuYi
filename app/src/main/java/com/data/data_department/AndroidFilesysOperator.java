@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -281,6 +283,28 @@ public class AndroidFilesysOperator {
         bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
         out.flush();
         out.close();
+    }
+
+    /**
+     * 把pic_uri处的图片存入filePath/filename下，并且载入相册，失败
+     * @param filePath
+     * @param filename
+     * @param pic_uri
+     * @param front
+     * @throws IOException
+     */
+    public static void saveJPGToGallery(File filePath,String filename,Uri pic_uri,AppCompatActivity front) throws IOException
+    {
+        File output = AndroidFilesysOperator.createEmptyFile(filePath, filename);
+        Bitmap bmp=ImageOperator.getBitmap(pic_uri,front);
+        FileOutputStream fos = new FileOutputStream(output);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        //fos.flush();
+        //fos.close();
+
+        // 把file里面的图片插入到系统相册中
+        //MediaStore.Images.Media.insertImage(front.getContentResolver(), output.getAbsolutePath(), filename, null);
+        //ImageOperator.flushAlbum(pic_uri,front);
     }
 
 }

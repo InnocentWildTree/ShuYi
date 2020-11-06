@@ -102,6 +102,19 @@ public class ImageOperator {
         return temp;
     }
 
+    /**
+     * 将照片纳入相册
+     * @param imageUri
+     * @param front
+     */
+    public static void flushAlbum(Uri imageUri,AppCompatActivity front)
+    {
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(imageUri);
+        front.sendBroadcast(intent);
+    }
+
+
 
     /**
      * 判断拍照是否成功

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param resultCode
      * @param data
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -69,7 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 Bitmap a=ImageOperator.getBitmap(temp,this);
                 ImageOperator.displayBitmap(img,a);
+
                 //AndroidFilesysOperator.saveJPGInside(a,"a.jpg",this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                AndroidFilesysOperator.saveJPGToGallery(this.getExternalMediaDirs()[0],"out.jpg",temp,this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -96,11 +103,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         //File temp=new File(this.getExternalMediaDirs()[0],"out.jpg");
         //OkHTTPOrderer.PostJpg("http://192.168.6.109:5000/check_in/",new CheckInOrderer(null,txt),temp,"out.jpg");
-
-        //temp=ImageOperator.takePhoto(this.getExternalMediaDirs()[0],"out.jpg","com.example.cameraalbumtest.fileprovider",1,this);
-
+        //PermissionTool.requestStoragePermission(1,this);
+        temp=ImageOperator.takePhoto(this.getExternalMediaDirs()[0],"out.jpg","com.example.cameraalbumtest.fileprovider",1,this);
+        //ImageOperator.openAlbum(1,this);
         //OkHTTPOrderer.Get("http://192.168.6.109:5000/static/images/out.jpg",new CheckInOrderer(null,this,handler));
-        txt.setText(String.valueOf(WebTools.isConnectIsNomarl(this)));
+        //txt.setText(String.valueOf(WebTools.isConnectIsNomarl(this)));
+
     }
 
 }
